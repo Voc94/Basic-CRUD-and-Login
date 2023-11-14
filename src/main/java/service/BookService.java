@@ -1,16 +1,17 @@
 package service;
 
 import model.Book;
+import model.BookInterface;
 
 import java.util.List;
 
 public interface BookService {
 
-    List<Book> findAll();
+    List<BookInterface> findAll();
 
-    Book findById(Long id);
+    BookInterface findById(Long id);
 
-    boolean save(Book book);
+    boolean save(BookInterface book);
 
     int getAgeOfBook(Long id);
 }

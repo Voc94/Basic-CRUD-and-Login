@@ -5,7 +5,7 @@ import model.Book;
 import java.time.LocalDate;
 import java.util.Date;
 
-public class BookBuilder {
+public class BookBuilder implements BookBuilderInterface<Book,BookBuilder>{
 
     private Book book;
 

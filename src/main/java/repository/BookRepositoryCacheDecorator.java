@@ -1,32 +1,33 @@
 package repository;
 
 import model.Book;
+import model.BookInterface;
 
 import java.util.List;
 import java.util.Optional;
 
 public class BookRepositoryCacheDecorator extends BookRepositoryDecorator{
-    private Cache<Book> cache;
+    private Cache<BookInterface> cache;
 
-    public BookRepositoryCacheDecorator(BookRepository bookRepository, Cache<Book> cache){
+    public BookRepositoryCacheDecorator(BookRepository bookRepository, Cache<BookInterface> cache){
         super(bookRepository);
         this.cache = cache;
     }
 
     @Override
-    public List<Book> findAll() {
+    public List<BookInterface> findAll() {
         if (cache.hasResult()){
            return cache.load();
         }
 
-        List<Book> books = decoratedRepository.findAll();
+        List<BookInterface> books = decoratedRepository.findAll();
         cache.save(books);
 
         return books;
     }
 
     @Override
-    public Optional<Book> findById(Long id) {
+    public Optional<BookInterface> findById(Long id) {
 
         if (cache.hasResult()){
             return cache.load()
@@ -39,7 +40,7 @@ public class BookRepositoryCacheDecorator extends BookRepositoryDecorator{
     }
 
     @Override
-    public boolean save(Book book) {
+    public boolean save(BookInterface book) {
         cache.invalidateCache();
         return decoratedRepository.save(book);
     }

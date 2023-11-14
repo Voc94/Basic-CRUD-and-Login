@@ -42,12 +42,16 @@ public class JDBConnectionWrapper {
                 " author varchar(500) NOT NULL," +
                 " title varchar(500) NOT NULL," +
                 " publishedDate datetime DEFAULT NULL," +
+                " type varchar(255) DEFAULT NULL," +
+                " runTime int DEFAULT NULL," +
+                " format varchar(255) DEFAULT NULL," +
                 " PRIMARY KEY(id)," +
                 " UNIQUE KEY id_UNIQUE(id)" +
                 ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
 
         statement.execute(sql);
     }
+
 
     public boolean testConnection() throws SQLException {
         return connection.isValid(TIMEOUT);

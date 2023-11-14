@@ -1,6 +1,9 @@
 package repository;
 
+import model.AudioBook;
 import model.Book;
+import model.BookInterface;
+import model.EBook;
 import model.builder.BookBuilder;
 
 import java.sql.*;
@@ -10,21 +13,20 @@ import java.util.Optional;
 
 public class BookRepositoryMySQL implements BookRepository {
 
-    private Connection connection;
+    private final Connection connection;
 
     public BookRepositoryMySQL(Connection connection) {
         this.connection = connection;
     }
 
     @Override
-    public List<Book> findAll() {
-
-        List<Book> books = new ArrayList<>();
-
+    public List<BookInterface> findAll() {
         String sql = "SELECT * FROM book;";
+
+        List<BookInterface> books = new ArrayList<>();
+
         try {
             Statement statement = connection.createStatement();
-
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
@@ -39,39 +41,49 @@ public class BookRepositoryMySQL implements BookRepository {
     }
 
     @Override
-    public Optional<Book> findById(Long id) {
+    public Optional<BookInterface> findById(Long id) {
         String sql = "SELECT * FROM book WHERE id = ?";
-        Optional<Book> book = Optional.empty();
+        Optional<BookInterface> book = Optional.empty();
 
-        try{
+        try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()){
+            if (resultSet.next()) {
                 book = Optional.of(getBookFromResultSet(resultSet));
             }
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return book;
     }
 
-
     @Override
-    public boolean save(Book book) {
-        String preparedStatementSql = "INSERT INTO book (author, title, publishedDate) VALUES (?, ?, ?);";
-        String statementSql = "INSERT INTO book VALUES(null, '" + book.getAuthor() + "', '" + book.getTitle() + "', '" + book.getPublishedDate() + "');";
+    public boolean save(BookInterface book) {
+        String sql = "INSERT INTO book (author, title, publishedDate, type, runTime, format) VALUES (?, ?, ?, ?, ?, ?);";
 
         try {
-            // Use PreparedStatement for the primary save
-            PreparedStatement preparedStatement = connection.prepareStatement(preparedStatementSql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, book.getAuthor());
             preparedStatement.setString(2, book.getTitle());
             preparedStatement.setDate(3, java.sql.Date.valueOf(book.getPublishedDate()));
+            preparedStatement.setString(4, String.valueOf(book.getClass())); // Assuming you have a method to get the type
+
+            // Set additional parameters based on the type of book
+            if (book instanceof AudioBook) {
+                preparedStatement.setInt(5, ((AudioBook) book).getRunTime());
+                preparedStatement.setNull(6, Types.VARCHAR);
+            } else if (book instanceof EBook) {
+                preparedStatement.setNull(5, Types.INTEGER);
+                preparedStatement.setString(6, ((EBook) book).getFormat());
+            } else {
+                preparedStatement.setNull(5, Types.INTEGER);
+                preparedStatement.setNull(6, Types.VARCHAR);
+            }
 
             int rowsInserted = preparedStatement.executeUpdate();
 
@@ -84,10 +96,6 @@ public class BookRepositoryMySQL implements BookRepository {
                 }
             }
 
-            // Use Statement for the additional save if needed
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(statementSql);
-
             return rowsInserted > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -96,20 +104,19 @@ public class BookRepositoryMySQL implements BookRepository {
     }
 
 
-
-
     @Override
     public void removeAll() {
         String sql = "DELETE FROM book WHERE id >= 0;";
 
-        try (Statement statement = connection.createStatement()) {
+        try {
+            Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private Book getBookFromResultSet(ResultSet resultSet) throws SQLException {
+    private BookInterface getBookFromResultSet(ResultSet resultSet) throws SQLException {
         return new BookBuilder()
                 .setId(resultSet.getLong("id"))
                 .setTitle(resultSet.getString("title"))
@@ -118,4 +125,3 @@ public class BookRepositoryMySQL implements BookRepository {
                 .build();
     }
 }
-

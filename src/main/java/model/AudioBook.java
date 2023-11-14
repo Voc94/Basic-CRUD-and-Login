@@ -1,15 +1,8 @@
 package model;
 
-// Java Bean -
-
-// POJO - Plain Old Java Object
-
-
 import java.time.LocalDate;
-import java.util.Date;
 
-public class Book implements BookInterface{
-
+public class AudioBook implements BookInterface{
     private Long id;
 
     private String author;
@@ -18,15 +11,16 @@ public class Book implements BookInterface{
 
     private LocalDate publishedDate;
 
-
+    private int runTime;
+    @Override
     public Long getId() {
         return id;
     }
-
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
-
+    @Override
     public String getAuthor() {
         return author;
     }
@@ -34,7 +28,7 @@ public class Book implements BookInterface{
     public void setAuthor(String author) {
         this.author = author;
     }
-
+    @Override
     public String getTitle() {
         return title;
     }
@@ -42,7 +36,12 @@ public class Book implements BookInterface{
     public void setTitle(String title) {
         this.title = title;
     }
-
+    public int getRunTime(){
+        return runTime;
+    }
+    public void setRunTime(int runTime){
+        this.runTime = runTime;
+    }
     public LocalDate getPublishedDate() {
         return publishedDate;
     }
@@ -50,9 +49,8 @@ public class Book implements BookInterface{
     public void setPublishedDate(LocalDate publishedDate) {
         this.publishedDate = publishedDate;
     }
-
     @Override
     public String toString(){
-        return String.format("Id: %d | Title: %s | Author: %s | Date: %s", this.id, this.title, this.author, this.publishedDate);
+        return String.format("Id: %d | Title: %s | Author: %s | RunTime: %s |Date: %s", this.id, this.title, this.author,this.runTime, this.publishedDate);
     }
 }
