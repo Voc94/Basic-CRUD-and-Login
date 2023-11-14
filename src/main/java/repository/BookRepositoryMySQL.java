@@ -3,10 +3,7 @@ package repository;
 import model.Book;
 import model.builder.BookBuilder;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,17 +40,73 @@ public class BookRepositoryMySQL implements BookRepository {
 
     @Override
     public Optional<Book> findById(Long id) {
-        return null;
+        String sql = "SELECT * FROM book WHERE id = ?";
+        Optional<Book> book = Optional.empty();
+
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()){
+                book = Optional.of(getBookFromResultSet(resultSet));
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return book;
     }
+
 
     @Override
     public boolean save(Book book) {
-        return false;
+        String preparedStatementSql = "INSERT INTO book (author, title, publishedDate) VALUES (?, ?, ?);";
+        String statementSql = "INSERT INTO book VALUES(null, '" + book.getAuthor() + "', '" + book.getTitle() + "', '" + book.getPublishedDate() + "');";
+
+        try {
+            // Use PreparedStatement for the primary save
+            PreparedStatement preparedStatement = connection.prepareStatement(preparedStatementSql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, book.getAuthor());
+            preparedStatement.setString(2, book.getTitle());
+            preparedStatement.setDate(3, java.sql.Date.valueOf(book.getPublishedDate()));
+
+            int rowsInserted = preparedStatement.executeUpdate();
+
+            if (rowsInserted > 0) {
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        long generatedId = generatedKeys.getLong(1);
+                        book.setId(generatedId);
+                    }
+                }
+            }
+
+            // Use Statement for the additional save if needed
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(statementSql);
+
+            return rowsInserted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
+
+
+
 
     @Override
     public void removeAll() {
+        String sql = "DELETE FROM book WHERE id >= 0;";
 
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private Book getBookFromResultSet(ResultSet resultSet) throws SQLException {
@@ -65,3 +118,4 @@ public class BookRepositoryMySQL implements BookRepository {
                 .build();
     }
 }
+
