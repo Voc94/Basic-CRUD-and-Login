@@ -4,9 +4,12 @@ import model.AudioBook;
 import model.Book;
 import model.BookInterface;
 import model.EBook;
+import model.builder.AudioBookBuilder;
 import model.builder.BookBuilder;
+import model.builder.EBookBuilder;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -117,11 +120,35 @@ public class BookRepositoryMySQL implements BookRepository {
     }
 
     private BookInterface getBookFromResultSet(ResultSet resultSet) throws SQLException {
-        return new BookBuilder()
-                .setId(resultSet.getLong("id"))
-                .setTitle(resultSet.getString("title"))
-                .setAuthor(resultSet.getString("author"))
-                .setPublishedDate(new java.sql.Date(resultSet.getDate("publishedDate").getTime()).toLocalDate())
-                .build();
+        Long id = resultSet.getLong("id");
+        String title = resultSet.getString("title");
+        String author = resultSet.getString("author");
+        LocalDate publishedDate = resultSet.getDate("publishedDate").toLocalDate();
+
+        if (resultSet.getInt("runTime") > 0) {
+            return new AudioBookBuilder()
+                    .setId(id)
+                    .setTitle(title)
+                    .setAuthor(author)
+                    .setPublishedDate(publishedDate)
+                    .setRunTime(resultSet.getInt("runTime"))
+                    .build();
+        } else if (resultSet.getString("format") != null) {
+            return new EBookBuilder()
+                    .setId(id)
+                    .setTitle(title)
+                    .setAuthor(author)
+                    .setPublishedDate(publishedDate)
+                    .setFormat(resultSet.getString("format"))
+                    .build();
+        } else {
+            return new BookBuilder()
+                    .setId(id)
+                    .setTitle(title)
+                    .setAuthor(author)
+                    .setPublishedDate(publishedDate)
+                    .build();
+        }
     }
+
 }
