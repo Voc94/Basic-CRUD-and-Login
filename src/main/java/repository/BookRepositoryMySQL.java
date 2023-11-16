@@ -67,25 +67,23 @@ public class BookRepositoryMySQL implements BookRepository {
 
     @Override
     public boolean save(BookInterface book) {
-        String sql = "INSERT INTO book (author, title, publishedDate, type, runTime, format) VALUES (?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO book (author, title, publishedDate, runTime, format) VALUES (?, ?, ?, ?, ?);";
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, book.getAuthor());
             preparedStatement.setString(2, book.getTitle());
             preparedStatement.setDate(3, java.sql.Date.valueOf(book.getPublishedDate()));
-            preparedStatement.setString(4, String.valueOf(book.getClass())); // Assuming you have a method to get the type
-
             // Set additional parameters based on the type of book
             if (book instanceof AudioBook) {
-                preparedStatement.setInt(5, ((AudioBook) book).getRunTime());
-                preparedStatement.setNull(6, Types.VARCHAR);
+                preparedStatement.setInt(4, ((AudioBook) book).getRunTime());
+                preparedStatement.setNull(5, Types.VARCHAR);
             } else if (book instanceof EBook) {
-                preparedStatement.setNull(5, Types.INTEGER);
-                preparedStatement.setString(6, ((EBook) book).getFormat());
+                preparedStatement.setNull(4, Types.INTEGER);
+                preparedStatement.setString(5, ((EBook) book).getFormat());
             } else {
-                preparedStatement.setNull(5, Types.INTEGER);
-                preparedStatement.setNull(6, Types.VARCHAR);
+                preparedStatement.setNull(4, Types.INTEGER);
+                preparedStatement.setNull(5, Types.VARCHAR);
             }
 
             int rowsInserted = preparedStatement.executeUpdate();

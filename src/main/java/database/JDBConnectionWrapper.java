@@ -42,7 +42,6 @@ public class JDBConnectionWrapper {
                 " author varchar(500) NOT NULL," +
                 " title varchar(500) NOT NULL," +
                 " publishedDate datetime DEFAULT NULL," +
-                " type varchar(255) DEFAULT NULL," +
                 " runTime int DEFAULT NULL," +
                 " format varchar(255) DEFAULT NULL," +
                 " PRIMARY KEY(id)," +
