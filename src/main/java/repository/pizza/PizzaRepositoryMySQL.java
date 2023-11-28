@@ -62,14 +62,14 @@ public class PizzaRepositoryMySQL implements PizzaRepository {
     @Override
     public boolean save(Pizza pizza) {
         String preparedStatementSql = "INSERT INTO pizza (chef, name, deliveryDateTime) VALUES (?, ?, ?);";
-        String statementSql = "INSERT INTO pizza VALUES(null, '" + pizza.getChef() + "', '" + pizza.getName() + "', '" + pizza.getDeliveyDateTime() + "');";
+        String statementSql = "INSERT INTO pizza VALUES(null, '" + pizza.getChef() + "', '" + pizza.getName() + "', '" + pizza.getDeliveryDateTime() + "');";
 
         try {
             // Use PreparedStatement for the primary save
             PreparedStatement preparedStatement = connection.prepareStatement(preparedStatementSql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, pizza.getChef());
             preparedStatement.setString(2, pizza.getName());
-            preparedStatement.setTimestamp(3, Timestamp.valueOf(pizza.getDeliveyDateTime()));
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(pizza.getDeliveryDateTime()));
 
             int rowsInserted = preparedStatement.executeUpdate();
 

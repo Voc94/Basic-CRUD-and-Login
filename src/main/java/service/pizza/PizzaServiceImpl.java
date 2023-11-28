@@ -36,6 +36,6 @@ public class PizzaServiceImpl implements PizzaService{
 
         LocalDateTime now = LocalDateTime.now();
 
-        return (int)ChronoUnit.MINUTES.between(pizza.getDeliveyDateTime(), now);
+        return (int)ChronoUnit.MINUTES.between(pizza.getDeliveryDateTime(), now);
     }
 }

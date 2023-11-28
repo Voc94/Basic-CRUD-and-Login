@@ -3,9 +3,7 @@ package model;
 // Java Bean -
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Pizza{
 
@@ -41,7 +39,7 @@ public class Pizza{
         this.name = name;
     }
 
-    public LocalDateTime getDeliveyDateTime() {
+    public LocalDateTime getDeliveryDateTime() {
         return deliveryDateTime;
     }
 

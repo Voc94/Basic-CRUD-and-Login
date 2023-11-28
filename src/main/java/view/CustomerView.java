@@ -11,22 +11,28 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.scene.control.cell.PropertyValueFactory;  // Import this
+
 import model.Pizza;
 import repository.pizza.PizzaRepository;
 
-public class CustomerView{
+import java.time.LocalDateTime;
+import java.util.List;
+
+public class CustomerView {
 
     private TableView<Pizza> pizzaTable;
     private GridPane gridPane;
+
     public CustomerView(Stage primaryStage, PizzaRepository pizzaRepository) {
         primaryStage.setTitle("Customer View");
 
-        GridPane gridPane = new GridPane();
+        gridPane = new GridPane();
         initializeGridPane(gridPane);
         Scene scene = new Scene(gridPane, 720, 480);
         primaryStage.setScene(scene);
 
-        initializeTableView(gridPane);
+        initializeTableView(gridPane, pizzaRepository);
 
         primaryStage.show();
     }
@@ -38,29 +44,33 @@ public class CustomerView{
         gridPane.setPadding(new Insets(25, 25, 25, 25));
     }
 
-    private void initializeTableView(GridPane gridPane) {
+    private void initializeTableView(GridPane gridPane, PizzaRepository pizzaRepository) {
         BorderPane borderPane = new BorderPane();
 
         // Create table
         pizzaTable = new TableView<>();
         pizzaTable.setEditable(false);
         pizzaTable.setMinWidth(480);
+
         TableColumn<Pizza, String> nameColumn = new TableColumn<>("Pizza Name");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         TableColumn<Pizza, String> chefColumn = new TableColumn<>("Pizza Chef");
+        chefColumn.setCellValueFactory(new PropertyValueFactory<>("chef"));
 
         TableColumn<Pizza, String> deliveryTimeColumn = new TableColumn<>("Pizza Delivery Time");
+        deliveryTimeColumn.setCellValueFactory(new PropertyValueFactory<>("deliveryDateTime"));
 
         pizzaTable.getColumns().addAll(nameColumn, chefColumn, deliveryTimeColumn);
         pizzaTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 
-        //search box
+        // Search box
         TextField searchBox = new TextField();
         searchBox.setPromptText("Search...");
         searchBox.textProperty().addListener((observable, oldValue, newValue) ->
                 filterTable(newValue.trim()));
 
-        //Buy button
+        // Buy button
         Button buyButton = createBuyButton();
 
         HBox buttonBox = new HBox(buyButton);
@@ -69,8 +79,10 @@ public class CustomerView{
         borderPane.setRight(buttonBox);
 
         gridPane.add(borderPane, 0, 1);
-    }
 
+        // Fill the table with data
+        fillTable(pizzaRepository.findAll());
+    }
 
     private Button createBuyButton() {
         Button buyButton = new Button("Buy");
@@ -82,12 +94,19 @@ public class CustomerView{
     }
 
     private void filterTable(String keyword) {
+        // Add logic to filter the table based on the search keyword
+        // You can use a FilteredList or manipulate the items directly
     }
+
+    private void fillTable(List<Pizza> pizzas) {
+        pizzaTable.getItems().setAll(pizzas);
+    }
+
     public GridPane getGridPane() {
         return gridPane;
     }
+
     public Scene getScene() {
         return gridPane.getScene();
     }
-
 }
