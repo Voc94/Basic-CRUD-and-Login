@@ -24,7 +24,7 @@ public class UserValidator {
         return errors.isEmpty();
     }
     private void validateUsername(String username){
-        if( Pattern.compile(EMAIL_VALIDATION_REGEX).matcher(username).matches()){
+        if(!Pattern.compile(EMAIL_VALIDATION_REGEX).matcher(username).matches()){
             errors.add("Email is not valid!");
         }
     }
