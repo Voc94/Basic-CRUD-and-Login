@@ -22,7 +22,7 @@ Welcome to the Pizza Store JavaFX application! This application provides a user-
 #### Employee (<u>both for (5.12.2023)</u>)
 - CRUD pizzas (Create Retrieve Update Delete)
 - SELL_PIZZAS <i>(daca vrei poti asocia un employee id unui customer pt a da SELL PIZZA),trebuie explicat</i>
-- PDF_REPORT OF ALL BOOKS SOLD integrat in aplicatie
+- PDF_REPORT OF ALL PIZZAS SOLD integrat in aplicatie
 #### Admin  
 - CRUD Employee (creaza editeaza etc. Angajatii)
 - PDF REPORT OF ALL EMPLOYEES activity
