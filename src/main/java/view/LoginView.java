@@ -27,7 +27,7 @@ public class LoginView {
     private Text actiontarget;
 
     public LoginView(Stage primaryStage) {
-        primaryStage.setTitle("Book Store");
+        primaryStage.setTitle("Pizza Store");
 
         GridPane gridPane = new GridPane();
         initializeGridPane(gridPane);
