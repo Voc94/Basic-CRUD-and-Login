@@ -16,12 +16,12 @@ Welcome to the Pizza Store JavaFX application! This application provides a user-
 - MySQL
 - Gradle
 
-#### Customer 
-- view all books
-- buy book
-#### Employee 
-- CRUD books (Create Retrieve Update Delete)
-- SELL_Book(daca vrei poti asocia un employee id unui customer pt a da SELL BOOK),trebuie explicat
+#### Customer (<u>for 28.11.2023</u>)
+- view all pizzas
+- buy pizza
+#### Employee (<u>both for (5.12.2023)</u>)
+- CRUD pizzas (Create Retrieve Update Delete)
+- SELL_PIZZAS <i>(daca vrei poti asocia un employee id unui customer pt a da SELL PIZZA),trebuie explicat</i>
 - PDF_REPORT OF ALL BOOKS SOLD integrat in aplicatie
 #### Admin  
 - CRUD Employee (creaza editeaza etc. Angajatii)
