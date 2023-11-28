@@ -37,11 +37,11 @@ public class JDBConnectionWrapper {
     private void createTables() throws SQLException {
         Statement statement = connection.createStatement();
 
-        String sql = "CREATE TABLE IF NOT EXISTS book(" +
+        String sql = "CREATE TABLE IF NOT EXISTS pizza(" +
                 " id bigint NOT NULL AUTO_INCREMENT," +
-                " author varchar(500) NOT NULL," +
-                " title varchar(500) NOT NULL," +
-                " publishedDate datetime DEFAULT NULL," +
+                " chef varchar(500) NOT NULL," +
+                " name varchar(500) NOT NULL," +
+                " deliveryDateTime datetime DEFAULT NULL," +
                 " PRIMARY KEY(id)," +
                 " UNIQUE KEY id_UNIQUE(id)" +
                 ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
