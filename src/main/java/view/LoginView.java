@@ -18,7 +18,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class LoginView {
+public class LoginView  {
 
     private TextField userTextField;
     private PasswordField passwordField;
@@ -50,13 +50,14 @@ public class LoginView {
     }
 
     private void initializeSceneTitle(GridPane gridPane){
-        Text sceneTitle = new Text("Welcome to our Book Store");
-        sceneTitle.setFont(Font.font("Tahome", FontWeight.NORMAL, 20));
+        Text sceneTitle = new Text("Welcome to our Pizza App");
+        sceneTitle.setFont(Font.font("Comic Sans MS", FontWeight.NORMAL, 20));
         gridPane.add(sceneTitle, 0, 0, 2, 1);
     }
 
     private void initializeFields(GridPane gridPane){
-        Label userName = new Label("User Name:");
+        Label userName = new Label("Username:");
+        userName.setFont(Font.font("JetBrains Mono"));
         gridPane.add(userName, 0, 1);
 
         userTextField = new TextField();
@@ -64,7 +65,7 @@ public class LoginView {
 
         Label password = new Label("Password");
         gridPane.add(password, 0, 2);
-
+        password.setFont(Font.font("JetBrains Mono"));
         passwordField = new PasswordField();
         gridPane.add(passwordField, 1, 2);
 

@@ -26,6 +26,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public Notification<Boolean> register(String username, String password) {
+        Notification<Boolean> userRegisterNotification = new Notification<>();
+
+        // Check if the username is already taken
+        if (userRepository.existsByUsername(username)) {
+            userRegisterNotification.addError("Username or Password is invalid");
+            userRegisterNotification.setResult(Boolean.FALSE);
+            return userRegisterNotification;
+        }
 
         Role customerRole = rightsRolesRepository.findRoleByTitle(CUSTOMER);
 
@@ -34,18 +42,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .setPassword(password)
                 .setRoles(Collections.singletonList(customerRole))
                 .build();
-        UserValidator userValidator = new UserValidator(user);
 
+        UserValidator userValidator = new UserValidator(user);
         boolean userValid = userValidator.validate();
-        Notification<Boolean> userRegisterNotification = new Notification<>();
 
         if (!userValid) {
-            userValidator.getErrors().forEach(userRegisterNotification :: addError);
+            userValidator.getErrors().forEach(userRegisterNotification::addError);
             userRegisterNotification.setResult(Boolean.FALSE);
         } else {
             user.setPassword(hashPassword(password));
             userRegisterNotification.setResult(userRepository.save(user));
         }
+
         return userRegisterNotification;
     }
 

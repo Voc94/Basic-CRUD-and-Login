@@ -15,7 +15,7 @@ public class Pizza{
 
     private String name;
 
-    private LocalDateTime deliveyDateTime;
+    private LocalDateTime deliveryDateTime;
 
 
     public Long getId() {
@@ -42,15 +42,15 @@ public class Pizza{
     }
 
     public LocalDateTime getDeliveyDateTime() {
-        return deliveyDateTime;
+        return deliveryDateTime;
     }
 
     public void setDeliveyDateTime(LocalDateTime deliveyDateTime) {
-        this.deliveyDateTime = deliveyDateTime ;
+        this.deliveryDateTime = deliveyDateTime ;
     }
     @Override
     public String toString(){
-        return String.format("Id: %d | Name: %s | Chef: %s | Date: %s Hour: %s Minute: %s", this.id, this.name, this.chef, this.deliveyDateTime.toLocalDate(),this.deliveyDateTime.getHour(),this.deliveyDateTime.getMinute());
+        return String.format("Id: %d | Name: %s | Chef: %s | Date: %s Hour: %s Minute: %s", this.id, this.name, this.chef, this.deliveryDateTime.toLocalDate(),this.deliveryDateTime.getHour(),this.deliveryDateTime.getMinute());
     }
 }
 

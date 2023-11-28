@@ -2,28 +2,28 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.stage.Stage;
 import model.User;
 import model.validator.Notification;
-import model.validator.UserValidator;
+import repository.pizza.PizzaRepository;
 import service.user.AuthenticationService;
 import view.LoginView;
 
-import java.util.EventListener;
-import java.util.List;
-
 public class LoginController {
-
+    private final Stage stage;
     private final LoginView loginView;
     private final AuthenticationService authenticationService;
-
-
-    public LoginController(LoginView loginView, AuthenticationService authenticationService) {
+    private final PizzaRepository pizzaRepository;
+    public LoginController(LoginView loginView, AuthenticationService authenticationService, Stage stage, PizzaRepository pizzaRepository) {
         this.loginView = loginView;
         this.authenticationService = authenticationService;
-
+        this.stage = stage;
+        this.pizzaRepository = pizzaRepository;
         this.loginView.addLoginButtonListener(new LoginButtonListener());
         this.loginView.addRegisterButtonListener(new RegisterButtonListener());
     }
+
+
 
     private class LoginButtonListener implements EventHandler<ActionEvent> {
 
@@ -38,6 +38,8 @@ public class LoginController {
                 loginView.setActionTargetText(loginNotification.getFormattedErrors());
             }else{
                 loginView.setActionTargetText("Log In Successfull!");
+                CustomerController customerController = new CustomerController(stage,pizzaRepository);
+                customerController.switchToCustomerView(stage,pizzaRepository);
             }
 
         }
