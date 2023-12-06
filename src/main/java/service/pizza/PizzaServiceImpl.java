@@ -30,6 +30,12 @@ public class PizzaServiceImpl implements PizzaService{
         return pizzaRepository.save(pizza);
     }
 
+    public boolean removeById(Long id) {
+        return pizzaRepository.removeById(id);
+    }
+    public boolean update(Pizza pizza){
+        return pizzaRepository.update(pizza);
+    }
     @Override
     public int getTimeFromDelivery(Long id) {
         Pizza pizza = this.findById(id);

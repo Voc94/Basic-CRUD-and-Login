@@ -2,6 +2,7 @@ package repository.pizza;
 
 import model.Pizza;
 import model.builder.PizzaBuilder;
+import model.builder.SalesRecordBuilder;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -58,7 +59,47 @@ public class PizzaRepositoryMySQL implements PizzaRepository {
 
         return pizza;
     }
+    @Override
+    public boolean removeById(Long id) {
+        String sql = "DELETE FROM pizza WHERE id = ?";
 
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, id);
+
+            int rowsDeleted = preparedStatement.executeUpdate();
+
+            if (rowsDeleted == 0) {
+                System.out.println("No pizza found with ID: " + id);
+            } else {
+                System.out.println("Pizza with ID " + id + " has been deleted successfully.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean update(Pizza pizza) {
+        String sql = "UPDATE pizza SET chef = ?, name = ?, deliveryDateTime = ? WHERE id = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, pizza.getChef());
+            preparedStatement.setString(2, pizza.getName());
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(pizza.getDeliveryDateTime()));
+            preparedStatement.setLong(4, pizza.getId());
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Pizza with ID " + pizza.getId() + " has been updated successfully.");
+                return true;
+            } else {
+                System.out.println("No pizza found with ID: " + pizza.getId());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     @Override
     public boolean save(Pizza pizza) {
         String preparedStatementSql = "INSERT INTO pizza (chef, name, deliveryDateTime) VALUES (?, ?, ?);";

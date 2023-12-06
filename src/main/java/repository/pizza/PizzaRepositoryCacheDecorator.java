@@ -49,4 +49,16 @@ public class PizzaRepositoryCacheDecorator extends PizzaRepositoryDecorator{
         cache.invalidateCache();
         decoratedRepository.removeAll();
     }
+
+    @Override
+    public boolean removeById(Long id) {
+        cache.invalidateCache();
+        return decoratedRepository.removeById(id);
+    }
+
+    @Override
+    public boolean update(Pizza pizza) {
+        cache.invalidateCache();
+        return decoratedRepository.update(pizza);
+    }
 }

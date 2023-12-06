@@ -10,8 +10,9 @@ public interface PizzaService {
     List<Pizza> findAll();
 
     Pizza findById(Long id);
-
-    boolean save(Pizza book);
+    boolean removeById(Long id);
+    boolean update(Pizza pizza);
+    boolean save(Pizza pizza);
 
     int getTimeFromDelivery(Long id);
 }

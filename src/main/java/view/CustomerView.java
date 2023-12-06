@@ -1,5 +1,7 @@
 package view;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,24 +17,27 @@ import javafx.scene.control.cell.PropertyValueFactory;  // Import this
 
 import model.Pizza;
 import repository.pizza.PizzaRepository;
+import service.pizza.PizzaService;
+import service.pizza.PizzaServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class CustomerView {
+    private TableView pizzaTable;
 
-    private TableView<Pizza> pizzaTable;
+    private List<Pizza> pizzaList;
     private GridPane gridPane;
 
-    public CustomerView(Stage primaryStage, PizzaRepository pizzaRepository) {
+    public CustomerView(Stage primaryStage,List<Pizza> pizzaList) {
         primaryStage.setTitle("Customer View");
 
         gridPane = new GridPane();
         initializeGridPane(gridPane);
         Scene scene = new Scene(gridPane, 720, 480);
         primaryStage.setScene(scene);
-
-        initializeTableView(gridPane, pizzaRepository);
+        this.pizzaList = pizzaList;
+        initializeTableView(gridPane);
 
         primaryStage.show();
     }
@@ -44,11 +49,10 @@ public class CustomerView {
         gridPane.setPadding(new Insets(25, 25, 25, 25));
     }
 
-    private void initializeTableView(GridPane gridPane, PizzaRepository pizzaRepository) {
+    private void initializeTableView(GridPane gridPane) {
         BorderPane borderPane = new BorderPane();
-
         // Create table
-        pizzaTable = new TableView<>();
+        pizzaTable = new TableView<Pizza>();
         pizzaTable.setEditable(false);
         pizzaTable.setMinWidth(480);
 
@@ -61,7 +65,11 @@ public class CustomerView {
         TableColumn<Pizza, String> deliveryTimeColumn = new TableColumn<>("Pizza Delivery Time");
         deliveryTimeColumn.setCellValueFactory(new PropertyValueFactory<>("deliveryDateTime"));
 
-        pizzaTable.getColumns().addAll(nameColumn, chefColumn, deliveryTimeColumn);
+        pizzaTable.getColumns().addAll(
+                (TableColumn<Pizza, String>) nameColumn,
+                (TableColumn<Pizza, String>) chefColumn,
+                (TableColumn<Pizza, String>) deliveryTimeColumn
+        );
         pizzaTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 
         // Search box
@@ -81,7 +89,7 @@ public class CustomerView {
         gridPane.add(borderPane, 0, 1);
 
         // Fill the table with data
-        fillTable(pizzaRepository.findAll());
+        fillTable(pizzaList);
     }
 
     private Button createBuyButton() {
@@ -99,7 +107,7 @@ public class CustomerView {
     }
 
     private void fillTable(List<Pizza> pizzas) {
-        pizzaTable.getItems().setAll(pizzas);
+        pizzaTable.getItems().setAll(pizzaList);
     }
 
     public GridPane getGridPane() {

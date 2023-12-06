@@ -13,5 +13,7 @@ public interface PizzaRepository {
     boolean save(Pizza pizza);
 
     void removeAll();
+    boolean removeById(Long id);
+    boolean update(Pizza pizza);
 
 }

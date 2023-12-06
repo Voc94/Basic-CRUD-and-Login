@@ -12,8 +12,11 @@ public interface UserRepository {
     Notification<User> findByUsernameAndPassword(String username, String password);
 
     boolean save(User user);
-
+    Long findByUsername(String username);
     void removeAll();
+    public User findById(Long id);
 
     boolean existsByUsername(String username);
+
+    boolean removeById(Long id);
 }

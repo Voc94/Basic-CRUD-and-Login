@@ -1,5 +1,6 @@
 package service.user;
 
+import database.Constants;
 import model.Role;
 import model.User;
 import model.builder.UserBuilder;
@@ -11,6 +12,7 @@ import repository.user.UserRepository;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Collections;
+import java.util.List;
 
 import static database.Constants.Roles.CUSTOMER;
 
@@ -23,7 +25,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.userRepository = userRepository;
         this.rightsRolesRepository = rightsRolesRepository;
     }
-
     @Override
     public Notification<Boolean> register(String username, String password) {
         Notification<Boolean> userRegisterNotification = new Notification<>();
@@ -60,6 +61,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public Notification<User> login(String username, String password) {
         return userRepository.findByUsernameAndPassword(username, hashPassword(password));
+    }
+    @Override
+    public Long findByUsername(String username){
+        return userRepository.findByUsername(username);
     }
 
     @Override

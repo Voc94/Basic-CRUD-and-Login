@@ -7,6 +7,6 @@ public interface AuthenticationService {
     Notification<Boolean> register(String username, String password);
 
     Notification<User> login(String username, String password);
-
+    Long findByUsername(String username);
     boolean logout(User user);
 }
