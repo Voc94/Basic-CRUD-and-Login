@@ -238,13 +238,11 @@ public class EmployeeController {
                 PdfWriter.getInstance(my_pdf_report, new FileOutputStream(pdfFile));
                 my_pdf_report.open();
 
-                PdfPTable my_report_table = new PdfPTable(4);
+                PdfPTable my_report_table = new PdfPTable(3);
                 //cell object
                 PdfPCell table_cell;
 
                 //table headers
-                table_cell = new PdfPCell(new Paragraph("ID"));
-                my_report_table.addCell(table_cell);
                 table_cell = new PdfPCell(new Paragraph("Employee ID"));
                 my_report_table.addCell(table_cell);
                 table_cell = new PdfPCell(new Paragraph("Buyer ID"));
